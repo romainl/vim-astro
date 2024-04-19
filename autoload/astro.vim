@@ -29,8 +29,10 @@ endfunction
 " https://code.visualstudio.com/docs/languages/jsconfig
 function! astro#CollectPathsFromConfig() abort
     let config_json = findfile('tsconfig.json', '.;')
+
     if empty(config_json)
         let config_json = findfile('jsconfig.json', '.;')
+
         if empty(config_json)
             return
         endif
@@ -38,6 +40,7 @@ function! astro#CollectPathsFromConfig() abort
 
     let paths_from_config = config_json
                 \ ->readfile()
+                \ ->filter({ _, val -> val !~ '^\s*\/\/' })
                 \ ->join()
                 \ ->json_decode()
                 \ ->get('compilerOptions', {})
