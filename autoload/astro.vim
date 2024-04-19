@@ -40,7 +40,7 @@ function! astro#CollectPathsFromConfig() abort
 
     let paths_from_config = config_json
                 \ ->readfile()
-                \ ->filter({ _, val -> val !~ '^\s*\/\/' })
+                \ ->filter({ _, val -> val =~ '^\s*[\[\]{}"0-9]' })
                 \ ->join()
                 \ ->json_decode()
                 \ ->get('compilerOptions', {})
